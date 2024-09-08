@@ -22,7 +22,7 @@ export class App extends Component {
   render() {
     return (
 
-      <Router>
+      <Router basename='/DevNews'>
        <Navbar/>
        <LoadingBar
         color='#f11946'
@@ -31,7 +31,7 @@ export class App extends Component {
    <Routes>
       <Route exact path='/' element={ <News setProgress = {this.setProgress} pagesize = {this.pagesize}  category={"general"}/>}/>
 
-      <Route exact path='/Business' element = {<News setProgress = {this.setProgress} key="bussiness" pagesize = {this.pagesize}  category={"bussiness"}/>}/>
+      <Route exact path='/Business' element = {<News setProgress = {this.setProgress} key="business" pagesize = {this.pagesize}  category={"business"}/>}/>
       <Route exact path='/Entertainment' element = {<News setProgress = {this.setProgress} key="entertainment" pagesize = {this.pagesize}  category={"entertainment"}/>}/>
       <Route exact path='/Health'element = {<News setProgress = {this.setProgress} key="health" pagesize = {this.pagesize}  category={"health"}/>}/>
       <Route exact path='/Science' element = {<News setProgress = {this.setProgress} key="science" pagesize = {this.pagesize}  category={"science"}/>}/>
