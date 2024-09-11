@@ -29,7 +29,7 @@ export class App extends Component {
         progress={this.state.progress}
       />
    <Routes>
-      <Route exact path='/' element={ <News setProgress = {this.setProgress} pagesize = {this.pagesize}  category={"general"}/>}/>
+      <Route exact path='/' element={ <News setProgress = {this.setProgress}key="general" pagesize = {this.pagesize}  category={"general"}/>}/>
 
       <Route exact path='/Business' element = {<News setProgress = {this.setProgress} key="business" pagesize = {this.pagesize}  category={"business"}/>}/>
       <Route exact path='/Entertainment' element = {<News setProgress = {this.setProgress} key="entertainment" pagesize = {this.pagesize}  category={"entertainment"}/>}/>
