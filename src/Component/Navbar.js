@@ -1,9 +1,18 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 
 
 function Navbar() {
- let location = useLocation();
+  let location = useLocation();
+  useEffect(()=>{
+ setTimeout(()=>{
+  const element = document.getElementById("navbarSupportedContent");
+  if(element.classList.contains('show')){
+    element.classList.remove('show');
+  }
+ },700)
+  },[location])
+ 
   return (
     <div>
     <nav className="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
