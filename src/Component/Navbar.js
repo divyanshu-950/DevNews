@@ -19,7 +19,7 @@ function Navbar() {
     <nav className="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
     <div className="container-fluid">
       <Link className="navbar-brand " to="/"><strong style={{marginRight:"15px"}}>Dev
-      <i class="fa-regular fa-newspaper fa-sm"></i>
+      <i className="fa-regular fa-newspaper fa-sm"></i>
       News</strong></Link>
       <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span className="navbar-toggler-icon"></span>

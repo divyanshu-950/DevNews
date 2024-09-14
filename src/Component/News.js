@@ -77,7 +77,7 @@ export default class News extends Component {
         {this.state.loading && <Spinner/>}
         <div className="row">
         {this.state.article&&!this.state.loading&&this.state.article.map((element)=>{
-          return <div className="col-sm-4 mb-4 my-5"  key = {element.url} ><NewsItem title ={element.title?element.title.slice(0,51):""} description={element.description?element.description.slice(0,100):""} author = {element.author} date = {element.publishedAt} source = {element.source.name} image =  {element.urlToImage?element.urlToImage:"https://t3.ftcdn.net/jpg/03/27/55/60/240_F_327556002_99c7QmZmwocLwF7ywQ68ChZaBry1DbtD.jpg"} url = {element.url} /></div>
+          return <div className={`col-sm-${this.props.items} mb-4 my-5 `} key = {element.url} ><NewsItem title ={element.title?element.title.slice(0,51):""} description={element.description?element.description.slice(0,100):""} author = {element.author} date = {element.publishedAt} source = {element.source.name} image =  {element.urlToImage?element.urlToImage:"https://t3.ftcdn.net/jpg/03/27/55/60/240_F_327556002_99c7QmZmwocLwF7ywQ68ChZaBry1DbtD.jpg"} url = {element.url} /></div>
 
         })}
         </div>
