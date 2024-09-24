@@ -1,91 +1,75 @@
-import React, { Component } from 'react'
+import React, { useEffect,useState} from 'react'
 import NewsItem from './NewsItem'
 import Spinner from './Spinner';
 import PropTypes from 'prop-types'
 
 
-export default class News extends Component {
-  static defaultProps = {
-    pagesize: 15,
-    category: "general"
-    
-  }
-  static propTypes= {
-    pagesize: PropTypes.number,
-    category : PropTypes.string
-   }
-  articles = [];
-  constructor(props){
-    super(props);
-    this.state={
-      article : this.articles,
-      loading : false,
-      page: 1,
-      totalResults: 0,
-      start: 0,
-      end: this.props.pagesize
-    };
-    document.title= `${this.props.category !== 'general'? this.props.category.charAt(0).toUpperCase() + this.props.category.slice(1):"Home" } - DevNews`;
-  }
-  async updatepage(){
-    this.props.setProgress(10);
-    let url = `https://divyanshu-950.github.io/newsAPI/category/${this.props.category}.json`;
-    this.setState({loading: true});
+const News=(props)=> {
+ const[articles,setarticles] = useState();
+ const[loading,setloading] = useState(false);
+ const[start,setstart] = useState(0);
+ const[totalResults,settotalResults] = useState(0);
+ const[end,setend] = useState(props.pagesize);
+
+  const updatepage=async()=>{
+    props.setProgress(10);
+    let url = `https://divyanshu-950.github.io/newsAPI/category/${props.category}.json`;
+    setloading(true)
      let data = await fetch(url);
-     this.props.setProgress(50);
+     props.setProgress(50);
      let parseddata = await data.json();
-     this.props.setProgress(70);
-     this.setState({article:  parseddata.articles.slice(this.state.start,this.state.end),
-       totalResults:parseddata.articles.length,
-       loading: false
-     });
-
-      this.props.setProgress(100);
+     props.setProgress(70);
+     setarticles(parseddata.articles.slice(start,end))
+     settotalResults(parseddata.articles.length)
+     setloading(false)
+     console.log(parseddata.articles.slice(start,end));
+      props.setProgress(100);
   }
-  async componentDidMount(){
+  useEffect(()=>{
   // 
-  this.updatepage();
-  };
+  updatepage();
+  },[]);
 
-   handlenextclick = async()=>{
-  
-     this.setState({
-       start:this.state.start+ this.props.pagesize,
-       end: this.state.end+this.props.pagesize 
-     });
-     this.updatepage();
+   const handlenextclick = async()=>{
+     setstart(start+props.pagesize)
+     setend(end+props.pagesize)
+     updatepage();
      
     }
 
-      handleprevclick = async()=>{
-       
-         this.setState({
-           start: this.state.start < this.props.pagesize? 0:this.state.start - this.props.pagesize,
-           end: this.state.end - this.props.pagesize
-         });
-         this.updatepage();
+      const handleprevclick = async()=>{
+        setstart(start < props.pagesize?0:start-props.pagesize)
+        setend(end-props.pagesize)
+        updatepage();
         }
-
-   
-  render() {
     return (
       
       <div className="container">
         <h1 className = " text-center " style= {{marginTop: '85px',fontFamily: 'math'}}>
-        <small className="text-body-secondary"><strong>DevNews-Top Headlines  {this.props.category !== 'general'? 'on ' +this.props.category.charAt(0).toUpperCase() + this.props.category.slice(1):"" }</strong></small>
+        <small className="text-body-secondary"><strong>DevNews-Top Headlines  {props.category !== 'general'? 'on ' +props.category.charAt(0).toUpperCase() + props.category.slice(1):"" }</strong></small>
         </h1>
-        {this.state.loading && <Spinner/>}
+        {loading && <Spinner/>}
         <div className="row">
-        {this.state.article&&!this.state.loading&&this.state.article.map((element)=>{
-          return <div className={`col-sm-${this.props.items} mb-4 my-5 `} key = {element.url} ><NewsItem title ={element.title?element.title.slice(0,51):""} description={element.description?element.description.slice(0,100):""} author = {element.author} date = {element.publishedAt} source = {element.source.name} image =  {element.urlToImage?element.urlToImage:"https://t3.ftcdn.net/jpg/03/27/55/60/240_F_327556002_99c7QmZmwocLwF7ywQ68ChZaBry1DbtD.jpg"} url = {element.url} /></div>
+        {articles&&!loading&&articles.map((element)=>{
+          return <div className={`col-sm-${props.items} mb-4 my-5 `} key = {element.url} ><NewsItem title ={element.title?element.title.slice(0,51):""} description={element.description?element.description.slice(0,100):""} author = {element.author} date = {element.publishedAt} source = {element.source.name} image =  {element.urlToImage?element.urlToImage:"https://t3.ftcdn.net/jpg/03/27/55/60/240_F_327556002_99c7QmZmwocLwF7ywQ68ChZaBry1DbtD.jpg"} url = {element.url} /></div>
 
         })}
         </div>
          <div className="container d-flex justify-content-between" style={{marginBottom:'50px'}}>
-         <button type="button" disabled={this.state.start  < this.props.pagesize} className="btn btn-secondary" onClick={this.handleprevclick}>&larr; Previous</button>
-         <button type="button" disabled ={this.state.end >= this.state.totalResults}className="btn btn-secondary" onClick={this.handlenextclick}>Next &rarr;</button>
+         <button type="button" disabled={start  < props.pagesize} className="btn btn-secondary" onClick={handleprevclick}>&larr; Previous</button>
+         <button type="button" disabled ={end >= totalResults}className="btn btn-secondary" onClick={handlenextclick}>Next &rarr;</button>
          </div>
       </div>
     )
-  }
 }
+News.defaultProps = {
+  pagesize: 15,
+  category: "general"
+  
+}
+News.propTypes= {
+  pagesize: PropTypes.number,
+  category : PropTypes.string
+ }
+
+export default News
