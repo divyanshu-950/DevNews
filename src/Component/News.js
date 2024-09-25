@@ -22,7 +22,6 @@ const News=(props)=> {
      setarticles(parseddata.articles.slice(start,end))
      settotalResults(parseddata.articles.length)
      setloading(false)
-     console.log(parseddata.articles.slice(start,end));
       props.setProgress(100);
   }
   useEffect(()=>{
@@ -31,33 +30,38 @@ const News=(props)=> {
   },[]);
 
    const handlenextclick = async()=>{
+    props.setProgress(10);
+    let url = `https://divyanshu-950.github.io/newsAPI/category/${props.category}.json`;
+    setloading(true)
+     let data = await fetch(url);
+     props.setProgress(50);
+     let parseddata = await data.json();
+     props.setProgress(70);
+     setarticles(articles.concat(parseddata.articles.slice(start+props.pagesize,end+props.pagesize)))
+     settotalResults(parseddata.articles.length)
+     setloading(false)
+      props.setProgress(100);
      setstart(start+props.pagesize)
      setend(end+props.pagesize)
-     updatepage();
      
     }
 
-      const handleprevclick = async()=>{
-        setstart(start < props.pagesize?0:start-props.pagesize)
-        setend(end-props.pagesize)
-        updatepage();
-        }
     return (
       
       <div className="container">
         <h1 className = " text-center " style= {{marginTop: '85px',fontFamily: 'math'}}>
-        <small className="text-body-secondary"><strong>DevNews-Top Headlines  {props.category !== 'general'? 'on ' +props.category.charAt(0).toUpperCase() + props.category.slice(1):"" }</strong></small>
+        <small className="text-body-secondary"><strong>  {props.category !== 'general'?props.category.charAt(0).toUpperCase() + props.category.slice(1) +' News':"Top Headlines" } </strong></small>
         </h1>
+        <hr />
         {loading && <Spinner/>}
         <div className="row">
-        {articles&&!loading&&articles.map((element)=>{
-          return <div className={`col-sm-${props.items} mb-4 my-5 `} key = {element.url} ><NewsItem title ={element.title?element.title.slice(0,51):""} description={element.description?element.description.slice(0,100):""} author = {element.author} date = {element.publishedAt} source = {element.source.name} image =  {element.urlToImage?element.urlToImage:"https://t3.ftcdn.net/jpg/03/27/55/60/240_F_327556002_99c7QmZmwocLwF7ywQ68ChZaBry1DbtD.jpg"} url = {element.url} /></div>
+        {articles&&articles.map((element,i)=>{
+          return<><NewsItem  index = {i}title ={element.title?element.title.slice(0,51):""} description={element.description?element.description.slice(0,100):""} author = {element.author} date = {element.publishedAt} source = {element.source.name} image =  {element.urlToImage?element.urlToImage:"https://t3.ftcdn.net/jpg/03/27/55/60/240_F_327556002_99c7QmZmwocLwF7ywQ68ChZaBry1DbtD.jpg"} url = {element.url} /></>
 
         })}
         </div>
-         <div className="container d-flex justify-content-between" style={{marginBottom:'50px'}}>
-         <button type="button" disabled={start  < props.pagesize} className="btn btn-secondary" onClick={handleprevclick}>&larr; Previous</button>
-         <button type="button" disabled ={end >= totalResults}className="btn btn-secondary" onClick={handlenextclick}>Next &rarr;</button>
+         <div className="container d-flex justify-content-center" style={{marginBottom:'50px'}}>
+         <button type="button"style={end >= totalResults?{display:'none'}:{}}className="btn btn-primary" onClick={handlenextclick}>Load More  <i class="fa-solid fa-chevron-down"></i></button>
          </div>
       </div>
     )
