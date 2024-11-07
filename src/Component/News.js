@@ -2,6 +2,8 @@ import React, { useEffect,useState} from 'react'
 import NewsItem from './NewsItem'
 import Spinner from './Spinner';
 import PropTypes from 'prop-types'
+import img from "./news1.gif"
+import img1 from "./news2.gif"
 
 
 const News=(props)=> {
@@ -49,14 +51,44 @@ const News=(props)=> {
     return (
       
       <div className="container">
-        <h1 className = " text-center " style= {{marginTop: '85px',fontFamily: 'math'}}>
+       <div className='d-flex'>
+       <div
+                  className="container mt-5"
+                  style={{
+                    objectFit: "contain",
+                    height: "7rem",
+                    width: "9rem",
+                  }}
+                >
+                  <img
+                    src={img}
+                    style={{ height: "100%", width: "100%" }}
+                    alt="img"
+                  />
+                </div>
+       <h1 className = " text-center " style= {{marginTop: '85px',fontFamily: 'math'}}>
         <small className="text-body-secondary"><strong>  {props.category !== 'general'?props.category.charAt(0).toUpperCase() + props.category.slice(1) +' News':"Top Headlines" } </strong></small>
         </h1>
+        <div
+                  className="container mt-5"
+                  style={{
+                    objectFit: "contain",
+                    height: "7rem",
+                    width: "9rem",
+                  }}
+                >
+                  <img
+                    src={img1}
+                    style={{ height: "100%", width: "100%" }}
+                    alt="img"
+                  />
+                </div>
+       </div>
         <hr />
         {loading && <Spinner/>}
         <div className="row">
         {articles&&articles.map((element,i)=>{
-          return<><NewsItem  index = {i}title ={element.title?element.title.slice(0,51):""} description={element.description?element.description.slice(0,100):""} author = {element.author} date = {element.publishedAt} source = {element.source.name} image =  {element.urlToImage?element.urlToImage:"https://t3.ftcdn.net/jpg/03/27/55/60/240_F_327556002_99c7QmZmwocLwF7ywQ68ChZaBry1DbtD.jpg"} url = {element.url} /></>
+          return<><NewsItem  index = {i}title ={element.title?element.title.slice(0,51)+"...":""} description={element.description?element.description.slice(0,100):""} author = {element.author} date = {element.publishedAt} source = {element.source.name} image =  {element.urlToImage?element.urlToImage:"https://t3.ftcdn.net/jpg/03/27/55/60/240_F_327556002_99c7QmZmwocLwF7ywQ68ChZaBry1DbtD.jpg"} url = {element.url} /></>
 
         })}
         </div>
